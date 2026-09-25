@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: #F97316;
+  color: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0b0b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #252525;
+  border: 2px solid #0b0b0b;
+  border-radius: 10px;
+
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff6500;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #ff6500;
+}
+
+
+body {
+  margin: 0;
+
+  min-width: 320px;
+
+  background: #090909;
+
+  font-family: "Tajawal", sans-serif;
+}
+
+
+/* ========================================
+   BUTTON
+======================================== */
+
+button {
+  cursor: pointer;
+}
+
+
+
+/* Grid Background */
+.about-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.055) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.055) 1px,
+      transparent 1px
+    );
+
+  background-size: 72px 72px;
+  pointer-events: none;
+}
+
+
+/* Orange Glow */
+.about-page::after {
+  content: "";
+  position: absolute;
+
+  width: 650px;
+  height: 350px;
+
+  top: 80px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 94, 0, 0.08),
+    transparent 70%
+  );
+
+  pointer-events: none;
+}
+
+
+/* Values Full Width Background */
+.values-section::before {
+  content: "";
+
+  position: absolute;
+  z-index: -1;
+
+  top: -40px;
+  bottom: 0;
+  left: -100vw;
+  right: -100vw;
+
+  background: #101010;
+}
+
+
+/* Team Full Width Background */
+.team-section::before {
+  content: "";
+
+  position: absolute;
+  z-index: -1;
+
+  top: 0;
+  bottom: 0;
+
+  left: 50%;
+  width: 100vw;
+
+  transform: translateX(-50%);
+
+  background: #000;
+}
