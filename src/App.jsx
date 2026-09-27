@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import "./App.css";
+import {
+  useLocation,
+  useNavigate,
+  matchPath,
+} from "react-router-dom";
+
+import postsData from "./data/posts.json";
 
 import adasaLogo from "./assets/image/logo-GdqARQRt.png";
 
@@ -14,22 +20,138 @@ import PrivacyPolicy from "./Component/PrivacyPolicy/PrivacyPolicy";
 import TermsOfService from "./Component/TermsOfService/TermsOfService";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState("home");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  /*
+   * =========================================================
+   * ROUTING
+   * =========================================================
+   */
+
+  const currentPage = location.pathname.startsWith("/blog")
+    ? "blog"
+    : location.pathname === "/about"
+      ? "about"
+      : location.pathname === "/privacy"
+        ? "privacy"
+        : location.pathname === "/terms"
+          ? "terms"
+          : "home";
+
+  /*
+   * =========================================================
+   * ARTICLE ROUTE
+   * /blog/:slug
+   * =========================================================
+   */
+
+  const articleMatch = matchPath(
+    {
+      path: "/blog/:slug",
+      end: true,
+    },
+    location.pathname
+  );
+
+  const selectedPost = articleMatch
+    ? (postsData.posts || []).find(
+        (post) => post.slug === articleMatch.params.slug
+      ) || null
+    : null;
+
+  /*
+   * =========================================================
+   * EXISTING STATES
+   * =========================================================
+   */
+
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedPost, setSelectedPost] = useState(null);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handlePostClick = (post) => {
-    setSelectedPost(post);
-    setCurrentPage("blog");
+  /*
+   * =========================================================
+   * ROUTING ADAPTER
+   *
+   * بنحافظ على setCurrentPage علشان باقي الكود
+   * يفضل كما هو بدون أي تعديل.
+   * =========================================================
+   */
+
+  const setCurrentPage = (page) => {
+    switch (page) {
+      case "home":
+        navigate("/");
+        break;
+
+      case "blog":
+        navigate("/blog");
+        break;
+
+      case "about":
+        navigate("/about");
+        break;
+
+      case "privacy":
+        navigate("/privacy");
+        break;
+
+      case "terms":
+        navigate("/terms");
+        break;
+
+      default:
+        navigate("/");
+    }
   };
+
+  /*
+   * =========================================================
+   * SELECTED POST ADAPTER
+   *
+   * نفس الوظيفة القديمة ولكن عن طريق URL.
+   * =========================================================
+   */
+
+  const setSelectedPost = (post) => {
+    if (post?.slug) {
+      navigate(`/blog/${post.slug}`);
+      return;
+    }
+
+    if (location.pathname.startsWith("/blog/")) {
+      navigate("/blog");
+    }
+  };
+
+  /*
+   * =========================================================
+   * ARTICLE CLICK
+   * =========================================================
+   */
+
+  const handlePostClick = (post) => {
+    if (!post) {
+      navigate("/blog");
+      return;
+    }
+
+    navigate(`/blog/${post.slug}`);
+  };
+
+  /*
+   * =========================================================
+   * CATEGORY CLICK
+   * =========================================================
+   */
 
   const handleCategoryClick = (categoryName) => {
     console.log("Selected category:", categoryName);
 
-    setSelectedPost(null);
     setSelectedCategory(categoryName);
-    setCurrentPage("blog");
+
+    navigate("/blog");
   };
 
   useEffect(() => {
