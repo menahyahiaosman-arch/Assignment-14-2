@@ -3,6 +3,9 @@ import {
   useLocation,
   useNavigate,
   matchPath,
+  Routes,
+  Route,
+  Navigate,
 } from "react-router-dom";
 
 import postsData from "./data/posts.json";
@@ -671,7 +674,8 @@ function App() {
           PAGES
       ===================================================== */}
 
-      {currentPage === "home" ? (
+      <Routes>
+        <Route path="/" element={(
         <>
           {/* =================================================
               HERO
@@ -1405,7 +1409,8 @@ function App() {
 
           <Newsletter />
         </>
-      ) : currentPage === "blog" ? (
+      )} />
+        <Route path="/blog" element={(
         <Blog
           selectedCategory={selectedCategory}
           selectedPost={selectedPost}
@@ -1421,15 +1426,35 @@ function App() {
             });
           }}
         />
-      ) : currentPage === "privacy" ? (
+      )} />
+        <Route path="/blog/:slug" element={(
+        <Blog
+          selectedCategory={selectedCategory}
+          selectedPost={selectedPost}
+          onSelectPost={handlePostClick}
+          onGoHome={() => {
+            setSelectedPost(null);
+            setSelectedCategory(null);
+            setCurrentPage("home");
+
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
+        />
+      )} />
+        <Route path="/privacy" element={(
         <PrivacyPolicy
           setCurrentPage={setCurrentPage}
         />
-      ) : currentPage === "terms" ? (
+      )} />
+        <Route path="/terms" element={(
         <TermsOfService
           setCurrentPage={setCurrentPage}
         />
-      ) : (
+      )} />
+        <Route path="/about" element={(
         <About
           onGoBlog={() => {
             setSelectedPost(null);
@@ -1442,7 +1467,9 @@ function App() {
             });
           }}
         />
-      )}
+      )} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
 
       <Footer
         setCurrentPage={setCurrentPage}
